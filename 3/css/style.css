@@ -1,0 +1,201 @@
+*
+{
+	margin: 0;
+	padding: 0;
+	outline: none;
+}
+
+img
+{
+	border: none;
+}
+
+body
+{
+	font-family: Verdana;
+	
+}
+
+.grad
+{
+    background: linear-gradient(to top, #b5bdc8 0%, #828c95 36%, #28343b 100%);
+}
+
+.grad2
+{
+    background: linear-gradient(to top, #e5edf8 0%, #b2bcc5 36%, #58646b 100%);
+}
+
+header, footer, main
+{
+	margin: 20px;
+	padding: 20px;
+}
+
+footer, header
+{
+	text-align: center;
+}
+
+header
+{
+	 font-size: 20px;
+}
+
+footer
+{
+	font-size: 12px;
+}
+
+figure
+{
+	float:left;
+	width:50%;
+	margin: 10px 0 0 0;
+}
+
+img
+{
+	cursor: pointer;
+}
+
+aside
+{
+	float: left;
+	margin: 0 0 0 20px;
+}
+
+article
+{
+	margin-top: 20px;
+	text-align: justify;
+}
+
+.clr
+{
+	clear: both;
+}
+
+.br
+{
+	border-radius: 10px;
+}
+
+input,button
+{
+	font-size: 16px;
+	padding: 4px;
+}
+
+button:hover
+{
+	background-color: #eee;
+}
+
+form
+{
+	margin-bottom: 20px;
+}
+
+ol
+{
+	margin-top: 15px;
+	padding-left: 40px;
+}
+
+li
+{
+	cursor: pointer;
+}
+
+li:hover
+{
+	color: #aaa;
+}
+
+img
+{
+	margin: 0 auto 0 auto;
+	display: block;
+}
+
+figcaption
+{
+	text-align: center;
+}
+
+
+#map
+{
+	width: 600px;
+	height: 400px;
+}
+
+.drag
+{
+	width: 800px;
+	height: 300px;
+	border: 2px solid #ccc;
+}
+
+
+.drag img
+{
+	width: 280px;
+	height: 210px;
+	display: inline;
+}
+
+#drop img
+{
+	width: 280px;
+	height: 210px;
+	display: inline;
+}
+
+#elem
+{
+	width: 800px;
+	height: 200px;
+	border: 4px solid #ccc;
+}
+
+#drop_zone
+{
+	border: 1px solid #ccc;
+	background-color: #ccc;
+	width: 50%;
+	height: 50px;
+	text-align: center;
+	padding-top: 20px;
+	margin: 20px 0 0 0;
+		
+}
+
+
+
+output#user-place
+{
+	width: 400px;
+	display: inline-block;
+}
+
+form p
+{
+	margin: 5px 0 5px 5px;
+}
+
+.list
+{
+	overflow: scroll;
+}
+
+span
+{
+	width: 150px;
+	display: inline-block;
+	margin: 0 10px 0 5px;
+}
+
+
+

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Лабораторная по HTML5</title>
+		<link href="css/style.css" rel="stylesheet">
+		<script src="http://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+		
+		<script src="js/geo.js" type="text/javascript"></script>
+		<script src="js/app.js" type="text/javascript"></script>
+		<script src="js/map.js" type="text/javascript"></script>
+		<script src="js/file.js" type="text/javascript"></script>
+		<script src="js/storage.js" type="text/javascript"></script>
+		<script src="js/index.js" type="text/javascript"></script>
+		
+	</head>
+	<body>
+		<header class="grad br">Курсовой проект по HTML5</header>
+		<main>
+		<p>Ваше местонахождение: <output id="user-place"></output></p>
+		<figure>
+			<div id="map"></div>
+			<figcaption>Карта</figcaption>
+		</figure>
+		<aside>
+			<form id="add-form">
+				<p>
+					<label for="kind">Широта: </label>
+					<input id="lat" type="number" min="-90" max="90" step="0.01" value="56.65" required="required">
+				</p>
+				<p>
+					<label for="kind">Долгота: </label>
+					<input id="lng" type="number" min="-180" max="180" step="0.01" value="47.60" required="required">
+				</p>
+				<p>
+					<label for="kind">Описание: </label>
+					<input type="text" id="descr" required="required"/>
+				</p>
+				<p>
+					<button id="btn_add">Добавить</button>
+				</p>
+			</form>
+			<h3>Список объектов</h3>
+			<div id="list"></div>
+		</aside>
+		<div class="clr"></div>
+		<div class="br grad" id="drop_zone">Перетащите сюда файл с данными</div>
+		<article>
+			<h3>Йошка́р-Ола́</h3>
+			<p><b>Йошка́р-Ола́</b> (луговомар. Йошкар — «красный», Ола — «город» — «Красный Город», устар. Чарла, Цар-ола[5]) — город в России, столица Республики Марий Эл.
+
+Население — 260 352[3] чел. (2014). Основан в 1584 году как военное укрепление царем Фёдором Иоанновичем в центре Волго-Вятского региона, на берегу реки Малая Кокшага (левый приток Волги)[6]. До 1919 город назывался Царевококшайск, в период с 1919 по 1927 — Краснококшайск[5]. В 1984 году город был награждён орденом Трудового Красного Знамени.
+
+Современная Йошкар-Ола — крупный многоотраслевой промышленный, культурный и научный центр республики, является одним из центров культуры финно-угорских народов.
+			</p>
+		</article>
+		</main>
+		<footer class="grad br">&copy;Kuzovkov A.V. PSm-21</footer>
+		
+	</body>
+</html>

@@ -26,7 +26,9 @@ window.onload = function(){
 
 	function addMarker(center){
 		var myPlacemark = new ymaps.Placemark(center);
+			console.log(map.geoObjects);
 			map.geoObjects.add(myPlacemark);
+			console.log(myPlacemark);
 	}
 
 	function getPosition(){
@@ -64,6 +66,7 @@ window.onload = function(){
 			
 		}
 	}
+	
 	
 	/**работа с Worker**/
 	

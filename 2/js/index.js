@@ -1,4 +1,9 @@
 window.onload = function(){
+	
+	document.getElementById('start_btn').onclick = findSimple2;
+	document.getElementById('stop_btn').onclick = findStop;
+	var simple = document.getElementById('simple');
+	
 	var map;
     var center =  [55.76, 37.64];  
     var zoom = 10;
@@ -48,7 +53,39 @@ window.onload = function(){
 		addMarker(center);
 	} 
 
+	function findSimple(){
+		var n = 1;
+		search: while(true){
+			n += 1;
+			for( var i = 2; i < Math.sqrt(n); i++ )
+				if( n % i == 0 )
+					continue search;
+			simple.innerHTML = ' ' + n;
+			
+		}
+	}
 	
+	/**работа с Worker**/
+	
+	var worker; 
+	
+	function findSimple2(){
+		worker = new Worker('js/simple.js');
+		worker.onmessage = function(e){
+			simple.value = e.data;
+		};
+		
+		
+		worker.postMessage();
+	}
+	
+	function findStop(){
+		worker.terminate();
+	}	
+		
 	
 }
+
+
+
 

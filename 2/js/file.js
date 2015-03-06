@@ -1,4 +1,13 @@
 window.onload = function(){
+	
+	var list = document.getElementById('list');
+	var dropZone = document.getElementById('drop_zone');
+	var dropZone2 = document.getElementById('drop_zone2');
+	var clear_btn = document.getElementById('clear-data');
+	
+	list.innerHTML = (loadFromLocalStorage('list'))? loadFromLocalStorage('list') : '';
+	
+	/**обработчик выбора файлов**/
 	function handlerFileSelect(evt){
 		var files = evt.target.files;
 		var output = [];
@@ -10,7 +19,7 @@ window.onload = function(){
 	
 	document.getElementById('files').addEventListener('change', handlerFileSelect,false);
 	
-	
+	/**обработчик бросания файла**/
 	function handlerFileSelectDrop(evt){
 		evt.stopPropagation();
 		evt.preventDefault();
@@ -22,6 +31,7 @@ window.onload = function(){
 		document.getElementById('list').innerHTML = '<ul>' + output.join(':') + '</ul>';
 	}
 	
+	/**обработчик бросания файла в область для чтения**/
 	function handlerFileSelectDropRead(evt){
 		evt.stopPropagation();
 		evt.preventDefault();
@@ -31,10 +41,14 @@ window.onload = function(){
 		var reader = new FileReader();
 		reader.onload = function(e){
 			
-			document.getElementById('list').innerHTML = '<p>' + e.target.result + '</p>';
+			list.innerHTML = '<p>' + e.target.result + '</p>';
+			saveToLocalStorage('list',e.target.result);
+			
 		};
 		reader.readAsText(f);
 	}
+	
+	
 	
 	function handleDragOver(evt){
 		evt.stopPropagation();
@@ -42,11 +56,39 @@ window.onload = function(){
 		evt.dataTransfer.dropEffect = 'copy';
 	}
 	
-	var dropZone = document.getElementById('drop_zone');
-	var dropZone2 = document.getElementById('drop_zone2');
+	/**привязка обработчиков**/
+	
 	dropZone.addEventListener('dragover', handleDragOver,false);
 	dropZone.addEventListener('drop', handlerFileSelectDrop,false);
 	dropZone2.addEventListener('dragover', handleDragOver,false);
 	dropZone2.addEventListener('drop', handlerFileSelectDropRead,false);
+	clear_btn.addEventListener('click', clear,false);
+	
+	/**сохранение в локальном хранилище**/
+	function saveToLocalStorage(key,value){
+		if ( typeof(localStorage) != 'undefined'){
+			localStorage.setItem(key,value);
+		}
+	}
+	
+	/**чтение из локального хранилища**/
+	function loadFromLocalStorage(key){
+		if ( typeof(localStorage) != 'undefined'){
+			return localStorage.getItem(key);
+		}
+	}
+	
+	/**очистка локального хранилища**/
+	function clearLocalStorage(){
+		if ( typeof(localStorage) != 'undefined'){
+			localStorage.clear();
+		}
+	}
+	
+	
+	function clear(){
+		clearLocalStorage();
+		list.innerHTML = '';
+	}
 	
 };

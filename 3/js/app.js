@@ -46,7 +46,6 @@ var App =
 		App.elements.place.innerHTML = 'Широта: ' + this.center[0] + '; Долгота: ' + this.center[1];
 		YandexMapService.moveMap(this.center, this.zoom);
 		if ( App.markers != null ) App.updateMarkers();
-		YandexMapService.addMarker()
 	},
 	
 	noGeoInfo: function(errorMsg){
@@ -57,11 +56,14 @@ var App =
 		var center = [];
 		var text = '';
 		YandexMapService.deleteMarkers();
-		YandexMapService.addMarker(App.center,'Вы здесь!')
-		for ( var i = 0; i < this.markers.length; i++ ){
-			center = [this.markers[i].coordinates.latitude,this.markers[i].coordinates.longitude];
-			text = this.markers[i].name;
+		YandexMapService.addMarker2(App.center,'Вы здесь!')
+		for ( var i = 0; i < App.markers.length; i++ ){
+			center = [App.markers[i].coordinates.latitude,App.markers[i].coordinates.longitude];
+			text = App.markers[i].name;
 			YandexMapService.addMarker(center, text);
+			if ( !App.markers[i].visible ){
+				YandexMapService.hideMarker(center);
+			}
 		}
 		App.fillList();
 	},
@@ -69,6 +71,9 @@ var App =
 	readDataFromFile: function(data){
 		try{
 			this.markers = JSON.parse(data);
+			for ( var i = 0; i < this.markers.length; i++ ){
+				this.markers[i].visible = true;
+			}
 			this.saveMarkers();
 		}catch(e){
 			App.showMsg("Wrong file format!");
@@ -90,19 +95,38 @@ var App =
 			imgs[i].addEventListener('click', App.handlerClickDelete,false);
 		}
 		
-		//console.log(content);
+		var elems = document.getElementsByClassName('hide');
+		for ( var i = 0; i < elems.length; i++ ){
+			elems[i].addEventListener('click', App.handlerClickHide,false);
+		}
+		
 	},
 	
 	handlerClickDelete: function(e){
 		App.delMarker(parseInt(this.id.split('-').pop()));
 	}, 
 	
+	handlerClickHide: function(e){
+		if ( this.innerText == 'Скрыть' || this.textContent == 'Скрыть' ){
+			this.innerText = 'Показать';
+			this.textContent = 'Показать';
+			App.hideMarker(parseInt(this.id.split('-').pop()));
+		}else if ( this.innerText == 'Показать' || this.textContent == 'Показать'  ){
+			this.innerText = 'Скрыть';
+			this.textContent = 'Скрыть';
+			App.showMarker(parseInt(this.id.split('-').pop()));
+		}
+	},
+	
 	marker2string: function(i){
 		var str = '';
 		str += '<li>'; 
 		str += '<span class="id">' + App.markers[i].id + '</span>' + '<span class="name">' + App.markers[i].name + '</span>';
 		str += '<span class="coord">' + JSON.stringify([App.markers[i].coordinates.latitude,App.markers[i].coordinates.longitude]) + '</span>';
-		str += '<span class="del"><img class="del-img" id="del-' + App.markers[i].id + '" title="Удалить" src="img/delete.png"/></span></li>';
+		str += '<span class="del"><img class="del-img" id="del-' + App.markers[i].id + '" title="Удалить" src="img/delete.png"/></span>';
+		str += '<span class="hide" id="hide-' + App.markers[i].id + '">';
+		str += ( App.markers[i].visible )? 'Скрыть' : 'Показать';
+		str += '</span></li>';
 		return str;
 	},
 	
@@ -116,7 +140,7 @@ var App =
 		id++;
 		var lat = parseFloat(App.elements.lat.value);
 		var lng = parseFloat(App.elements.lng.value);
-		App.markers.push({id:id, name:App.elements.descr.value, coordinates:{latitude:lat, longitude:lng}});
+		App.markers.push({id:id, name:App.elements.descr.value, coordinates:{latitude:lat, longitude:lng}, visible:true});
 		App.updateMarkers();
 		App.saveMarkers();
 	
@@ -131,6 +155,28 @@ var App =
 		}
 		this.updateMarkers();
 		this.saveMarkers();
+	},
+	
+	hideMarker: function(id){
+		for ( var i = 0; i < App.markers.length; i++ ){
+			if ( App.markers[i].id == id ){
+				var center = [App.markers[i].coordinates.latitude, App.markers[i].coordinates.longitude];
+				App.markers[i].visible = false;
+				YandexMapService.hideMarker(center);
+			}
+		}
+		App.saveMarkers();
+	},
+	
+	showMarker: function(id){
+		for ( var i = 0; i < App.markers.length; i++ ){
+			if ( App.markers[i].id == id ){
+				var center = [App.markers[i].coordinates.latitude, App.markers[i].coordinates.longitude];
+				App.markers[i].visible = true;
+				YandexMapService.showMarker(center);
+			}
+		}
+		App.saveMarkers();
 	},
 	
 	showMsg: function(msg){

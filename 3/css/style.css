@@ -177,6 +177,7 @@ figcaption
 	background-color: #eee;
 	overflow: scroll;
 	height: 250px;
+	font-size: 0.8em;
 }
 
 #list ul
@@ -209,12 +210,12 @@ span.id
 
 span.name
 {
-	width: 150px;
+	width: 120px;
 }
 
 span.coord
 {
-	width: 200px;
+	width: 150px;
 }
 
 span.del
@@ -222,7 +223,10 @@ span.del
 	width: 30px;
 }
 
-
+span.hide
+{
+	width: 60px;
+}
 
 
 

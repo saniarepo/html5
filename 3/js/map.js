@@ -5,7 +5,7 @@ var YandexMapService =
 	zoom: 10,
 	center: [0,0],
 	id: null,
-	marks: [],
+	markers: [],
 	
 	setService: function(service){
 		this.service = service;
@@ -27,12 +27,38 @@ var YandexMapService =
 		var options = {draggable:false, preset: 'islands#blackStretchyIcon'};
 		var myPlacemark = new ymaps.Placemark(center, properties, options);
 		this.map.geoObjects.add(myPlacemark);
-		this.marks.push({lat:center[0], lng:center[1], text:text});
+		this.markers.push({lat:center[0], lng:center[1], text:text, object: myPlacemark});
+	},
+	
+	addMarker2: function(center, text){
+		var properties = {iconContent:text, hint:text}
+		var options = {draggable:false, preset: 'islands#icon', iconColor: '#a5260a'};
+		var myPlacemark = new ymaps.Placemark(center, properties, options);
+		this.map.geoObjects.add(myPlacemark);
+		this.markers.push({lat:center[0], lng:center[1], text:text, object: myPlacemark});
 	},
 	
 	deleteMarkers: function(){
 		this.map.geoObjects.removeAll();
-		this.marks = [];
+		this.markers = [];
+	},
+	
+	hideMarker: function(center){
+		for ( var i = 0; i < this.markers.length; i++ ){
+			if ( this.markers[i].lat == center[0] && this.markers[i].lng == center[1] ){
+				console.log('hide');
+				this.markers[i].object.options.set('visible', false);
+			}
+		}
+	},
+	
+	showMarker: function(center){
+		for ( var i = 0; i < this.markers.length; i++ ){
+			if ( this.markers[i].lat == center[0] && this.markers[i].lng == center[1] ){
+				this.markers[i].object.options.set('visible', true);
+				
+			}
+		}
 	}
 	
 }

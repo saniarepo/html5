@@ -5,8 +5,10 @@ var App =
 				dropZone: null,
 				place: null,
 				descr: null,
-				lat:null,
-				lng:null
+				lat: null,
+				lng: null,
+				checkbox_radius: null,
+				radius: null
 	},
 	
 	mapIdDom: 'map',
@@ -21,6 +23,10 @@ var App =
 		this.elements.descr = document.getElementById('descr');
 		this.elements.lat = document.getElementById('lat');
 		this.elements.lng = document.getElementById('lng');
+		this.elements.checkbox_radius = document.getElementById('checkbox-radius');
+		this.elements.radius = document.getElementById('radius');
+		this.elements.checkbox_radius.onchange = this.handlerRadius;
+		this.elements.radius.onchange = this.handlerRadius;
 		document.getElementById('add-form').onsubmit = this.addMarker;
 		YandexMapService.setService(ymaps);
 		YandexMapService.showMap(this.mapIdDom, this.center, this.zoom);
@@ -46,6 +52,8 @@ var App =
 		App.elements.place.innerHTML = 'Широта: ' + this.center[0] + '; Долгота: ' + this.center[1];
 		YandexMapService.moveMap(this.center, this.zoom);
 		if ( App.markers != null ) App.updateMarkers();
+		App.loadRadius();
+		App.loadCheckbox();
 	},
 	
 	noGeoInfo: function(errorMsg){
@@ -61,7 +69,7 @@ var App =
 			center = [App.markers[i].coordinates.latitude,App.markers[i].coordinates.longitude];
 			text = App.markers[i].name;
 			YandexMapService.addMarker(center, text);
-			if ( !App.markers[i].visible ){
+			if ( !App.markers[i].visible || !App.markers[i].in_radius ){
 				YandexMapService.hideMarker(center);
 			}
 		}
@@ -73,6 +81,7 @@ var App =
 			this.markers = JSON.parse(data);
 			for ( var i = 0; i < this.markers.length; i++ ){
 				this.markers[i].visible = true;
+				this.markers[i].in_radius = true;
 			}
 			this.saveMarkers();
 		}catch(e){
@@ -116,6 +125,23 @@ var App =
 			this.textContent = 'Скрыть';
 			App.showMarker(parseInt(this.id.split('-').pop()));
 		}
+	},
+	
+	handlerRadius: function(e){
+		var radius = parseInt(App.elements.radius.value);
+		if (App.elements.checkbox_radius.checked){
+			for ( var i = 0; i < App.markers.length; i++ ){
+				App.markers[i].in_radius = (App.getRast([App.markers[i].coordinates.latitude,App.markers[i].coordinates.longitude]) <= radius)? true : false;	
+			}
+		}else{
+			for ( var i = 0; i < App.markers.length; i++ ){
+				App.markers[i].in_radius = true;	
+			}
+		}
+		App.saveMarkers();
+		App.saveRadius();
+		App.saveCheckbox();
+		App.updateMarkers();
 	},
 	
 	marker2string: function(i){
@@ -197,6 +223,57 @@ var App =
 	
 	restoreCenter: function(){
 		return Storage.load('center');
+	},
+	
+	saveRadius: function(){
+		Storage.save('radius', App.elements.radius.value);
+	},
+	
+	loadRadius: function(){
+		App.elements.radius.value = parseInt(Storage.load('radius'));
+		if ( !App.elements.radius.value ) App.elements.radius.value = 1000;
+	},
+	
+	saveCheckbox: function(){
+		Storage.save('checkbox', App.elements.checkbox_radius.checked);
+	},
+	
+	loadCheckbox: function(){
+		App.elements.checkbox_radius.checked = JSON.parse(Storage.load('checkbox'));
+	},
+	
+	getRast: function(dot){
+		/**pi - число pi, rad - радиус сферы (Земли)**/
+		var rad = 6372795;
+
+		/**координаты двух точек**/
+		var llat1 = dot[0];
+		var llong1 = dot[1];
+
+		var llat2 = App.center[0];
+		var llong2 = App.center[1];
+
+		/**в радианах**/
+		var lat1 = llat1*Math.PI/180;
+		var lat2 = llat2*Math.PI/180;
+		var long1 = llong1*Math.PI/180;
+		var long2 = llong2*Math.PI/180;
+
+		/**косинусы и синусы широт и разницы долгот**/
+		var cl1 = Math.cos(lat1)
+		var cl2 = Math.cos(lat2)
+		var sl1 = Math.sin(lat1)
+		var sl2 = Math.sin(lat2)
+		var delta = long2 - long1
+		var cdelta = Math.cos(delta)
+		var sdelta = Math.sin(delta)
+
+		/**вычисления длины большого круга**/
+		var y = Math.sqrt(Math.pow(cl2*sdelta,2)+Math.pow(cl1*sl2-sl1*cl2*cdelta,2))
+		var x = sl1*sl2+cl1*cl2*cdelta
+		var ad = Math.atan2(y,x)
+		var dist = ad*rad
+		return dist;
 	}
 	
 	

@@ -46,7 +46,7 @@ var YandexMapService =
 	hideMarker: function(center){
 		for ( var i = 0; i < this.markers.length; i++ ){
 			if ( this.markers[i].lat == center[0] && this.markers[i].lng == center[1] ){
-				console.log('hide');
+				
 				this.markers[i].object.options.set('visible', false);
 			}
 		}

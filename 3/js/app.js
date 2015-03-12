@@ -109,6 +109,11 @@ var App =
 			elems[i].addEventListener('click', App.handlerClickHide,false);
 		}
 		
+		var names = document.getElementsByClassName('name');
+		for ( var i = 0; i < names.length; i++ ){
+			names[i].addEventListener('keyup', App.handlerNameChange,false);
+		}
+		
 	},
 	
 	handlerClickDelete: function(e){
@@ -144,10 +149,22 @@ var App =
 		App.updateMarkers();
 	},
 	
+	handlerNameChange: function(e){
+		var id = parseInt(this.id.split('-').pop());
+		var newName = this.innerHTML;
+		for ( var i = 0; i < App.markers.length; i++ ){
+			if ( App.markers[i].id == id ){
+				App.markers[i].name = newName;
+			}
+		}
+		App.saveMarkers();
+		App.updateMarkers();
+	},
+	
 	marker2string: function(i){
 		var str = '';
-		str += '<li>'; 
-		str += '<span class="id">' + App.markers[i].id + '</span>' + '<span class="name">' + App.markers[i].name + '</span>';
+		str += (i % 2 == 0)? '<li class="odd">' : '<li>'; 
+		str += '<span class="id">' + App.markers[i].id + '</span>' + '<span id="name-' + App.markers[i].id + '" class="name" contenteditable="true">' + App.markers[i].name + '</span>';
 		str += '<span class="coord">' + JSON.stringify([App.markers[i].coordinates.latitude,App.markers[i].coordinates.longitude]) + '</span>';
 		str += '<span class="del"><img class="del-img" id="del-' + App.markers[i].id + '" title="Удалить" src="img/delete.png"/></span>';
 		str += '<span class="hide" id="hide-' + App.markers[i].id + '">';

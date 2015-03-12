@@ -180,6 +180,11 @@ figcaption
 	font-size: 0.8em;
 }
 
+.odd
+{
+	background-color: #ccc;
+}
+
 #list ul
 {
 	list-style: none;

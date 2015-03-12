@@ -183,7 +183,11 @@ var App =
 		id++;
 		var lat = parseFloat(App.elements.lat.value);
 		var lng = parseFloat(App.elements.lng.value);
-		App.markers.push({id:id, name:App.elements.descr.value, coordinates:{latitude:lat, longitude:lng}, visible:true});
+		var in_radius = true;
+		if ( App.elements.checkbox_radius.checked ){
+			in_radius = ( App.getRast([lat,lng]) <= parseInt(App.elements.radius.value) )? true : false;
+		}
+		App.markers.push({id:id, name:App.elements.descr.value, coordinates:{latitude:lat, longitude:lng}, visible:true, in_radius:in_radius});
 		App.updateMarkers();
 		App.saveMarkers();
 	

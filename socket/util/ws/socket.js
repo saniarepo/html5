@@ -3,9 +3,14 @@
 (function () {
     // ======== private vars ========
 	var socket;
+	var xhttp;
+	var srvaddress = 'http://yourdomain.com/';
+	var startserveraddress = srvaddress+'echowsstart.php';
 
     ////////////////////////////////////////////////////////////////////////////
     var init = function () {
+
+		wsserverrun();
 		
 		socket = new WebSocket(document.getElementById("sock-addr").value);
 
@@ -22,13 +27,11 @@
         document.getElementById("sock-disc-butt").onclick = function () {
             connectionClose();
         };
-		
-		document.getElementById("sock-info-clear").onclick = function () {
-            document.getElementById("sock-info").innerHTML = '';
-        };
 
         document.getElementById("sock-recon-butt").onclick = function () {
-            socket = new WebSocket(document.getElementById("sock-addr").value);
+			wsserverrun();
+
+			socket = new WebSocket(document.getElementById("sock-addr").value);
             socket.onopen = connectionOpen;
             socket.onmessage = messageReceived;
         };
@@ -51,8 +54,30 @@
 
     }
 
+    var wsserverrun = function() {
 
-    return {
+        xhttp = new XMLHttpRequest();
+        xhttp.open('GET',startserveraddress,true);
+        xhttp.send();
+        xhttp.onreadystatechange=function(){
+            if (xhttp.readyState==4){
+				//Принятое содержимое файла должно быть опубликовано
+				console.log(xhttp.responseText);
+                 //Принятое содержимое json файла должно быть вначале обработано функцией eval
+				var json=eval( '('+xhttp.responseText+')' ); 
+
+				if (json.run == 1) return;
+				else if (json.run == 1){sleep(500); return;}
+			}
+        }
+    };
+
+	function sleep(ms) {
+		ms += new Date().getTime();
+		while (new Date().getTime() < ms){}
+	};
+    
+	return {
         ////////////////////////////////////////////////////////////////////////////
         // ---- onload event ----
         load : function () {

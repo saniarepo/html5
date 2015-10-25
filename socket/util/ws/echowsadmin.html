@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>echo ws server admin panel by petukhovsky.com</title>
+</head>
+<body>
+<h1>echo ws server admin panel</h1>
+<h2>echo ws server control buttons</h2>
+<input id="echo-ws-start" class="button" type="button" value="start" /> <input id="echo-ws-stop" class="button" type="button" value="stop" /> <!-- <input id="echo-ws-restart" class="button" type="button" value="restart" /> -->
+<br />
+
+<h2>echo ws server current status</h2>
+<div id="echo-ws-status" style="border: 1px solid">
+Loading... 
+</div>
+<input id="echo-ws-status-refresh" class="button" type="button" value="refresh" /><br /><br />
+
+<h2>echo ws server logfile</h2>
+<div id="echo-ws-logfile" style="border: 1px solid; overflow-y: scroll; height: 200px; resize: vertical;">
+Loading... 
+</div>
+<input id="echo-ws-logfile-refresh" class="button" type="button" value="refresh" /><br /><br />
+
+<script src="echowsadmin.js" type="text/javascript"></script>
+
+</body>
+</html>
